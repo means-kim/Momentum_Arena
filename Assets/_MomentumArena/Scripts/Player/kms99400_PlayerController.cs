@@ -39,6 +39,7 @@ public class kms99400_PlayerController : MonoBehaviour
     public bool IsMoving { get; private set; }
     public bool CanMove { get; private set; } = true;
     public float MoveSpeed => moveSpeed;
+    public bool IsGrounded => characterController.isGrounded;
 
     private CharacterController characterController;
     private kms99400_PlayerActions playerActions;
