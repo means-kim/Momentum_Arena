@@ -102,6 +102,8 @@ GameObject:
   - component: {fileID: 1555681161807942532}
   - component: {fileID: 3077571289253100613}
   - component: {fileID: 8908094994015116879}
+  - component: {fileID: 1992836282570512480}
+  - component: {fileID: 7839652517842630594}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -184,3 +186,37 @@ MonoBehaviour:
   chargePerSecond: 25
   minimumChargeSpeed: 0.1
   startingEnergy: 0
+--- !u!114 &1992836282570512480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5913105443731487916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5f914622543f045b1a73f6502def32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::kms99400_ShockwaveEmitter
+  centerOffset: {x: 0, y: 1, z: 0}
+  minimumRadius: 2
+  maximumRadius: 4.5
+  minimumKnockbackForce: 4
+  maximumKnockbackForce: 16
+  upwardForce: 1.5
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &7839652517842630594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5913105443731487916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b5580693184cef4c9122cbab999336b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::kms99400_PlayerAttack
+  attackCooldown: 0.5
