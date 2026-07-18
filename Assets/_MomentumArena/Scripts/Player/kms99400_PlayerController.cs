@@ -172,6 +172,8 @@ public class kms99400_PlayerController : MonoBehaviour
         {
             MoveInput = Vector2.zero;
             MoveDirection = Vector3.zero;
+            CurrentMoveSpeed = 0f;
+            IsMoving = false;
         }
     }
 }
