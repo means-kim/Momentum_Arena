@@ -744,6 +744,7 @@ GameObject:
   - component: {fileID: 1438183507}
   - component: {fileID: 1438183506}
   - component: {fileID: 1438183511}
+  - component: {fileID: 1438183512}
   m_Layer: 6
   m_Name: Enemy_Test
   m_TagString: Enemy
@@ -897,6 +898,19 @@ MonoBehaviour:
   groundCheckDistance: 0.15
   edgeCheckForwardDistance: 0.75
   edgeCheckDownDistance: 0.3
+--- !u!114 &1438183512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438183505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cca490aadd6461479cb0698f449a24a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::kms99400_EnemyFallDeath
+  deathHeight: -5
 --- !u!4 &1488792456 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2299824945960460469, guid: a28c7ccd3623ec246af0edd4801fbe30, type: 3}
