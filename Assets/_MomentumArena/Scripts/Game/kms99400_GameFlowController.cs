@@ -22,6 +22,18 @@ public class kms99400_GameFlowController : MonoBehaviour
     private kms99400_PlayerAttack playerAttack;
 
     [SerializeField]
+    [Tooltip("게임 시작 전 화면 전체를 덮는 시작 UI 루트입니다.")]
+    private GameObject startPanel;
+
+    [SerializeField]
+    [Tooltip("게임플레이를 시작시키는 버튼입니다.")]
+    private Button startButton;
+
+    [SerializeField]
+    [Tooltip("빌드된 게임을 종료하는 버튼입니다.")]
+    private Button quitButton;
+
+    [SerializeField]
     [Tooltip("화면 전체를 덮는 실패 UI 루트입니다.")]
     private GameObject failPanel;
 
@@ -43,14 +55,19 @@ public class kms99400_GameFlowController : MonoBehaviour
 
     private enum GameState
     {
+        WaitingToStart,
         Playing,
         Cleared,
         Failed
     }
 
-    private GameState currentState = GameState.Playing;
+    private GameState currentState = GameState.WaitingToStart;
 
-    public bool IsGameOver => currentState != GameState.Playing;
+    public bool IsGameOver =>
+        currentState == GameState.Cleared ||
+        currentState == GameState.Failed;
+
+    public bool IsWaitingToStart => currentState == GameState.WaitingToStart;
     public bool IsCleared => currentState == GameState.Cleared;
     public bool IsFailed => currentState == GameState.Failed;
 
@@ -64,6 +81,9 @@ public class kms99400_GameFlowController : MonoBehaviour
         bool isEnemySpawnerAssigned = enemySpawner != null;
         bool isPlayerControllerAssigned = playerController != null;
         bool isPlayerAttackAssigned = playerAttack != null;
+        bool isStartPanelAssigned = startPanel != null;
+        bool isStartButtonAssigned = startButton != null;
+        bool isQuitButtonAssigned = quitButton != null;
         bool isFailPanelAssigned = failPanel != null;
         bool isRestartButtonAssigned = restartButton != null;
         bool isClearPanelAssigned = clearPanel != null;
@@ -71,13 +91,16 @@ public class kms99400_GameFlowController : MonoBehaviour
         bool isThirdPersonCameraAssigned = thirdPersonCamera != null;
 
         if (!isPlayerFallDeathAssigned || !isEnemySpawnerAssigned || !isPlayerControllerAssigned ||
-            !isPlayerAttackAssigned || !isFailPanelAssigned || !isRestartButtonAssigned ||
+            !isPlayerAttackAssigned || !isStartPanelAssigned || !isStartButtonAssigned ||
+            !isQuitButtonAssigned || !isFailPanelAssigned || !isRestartButtonAssigned ||
             !isClearPanelAssigned || !isClearRestartButtonAssigned || !isThirdPersonCameraAssigned)
         {
             Debug.LogError(
                 $"{name}: kms99400_GameFlowController 참조가 올바르게 할당되지 않았습니다. " +
                 $"(PlayerFallDeath: {isPlayerFallDeathAssigned}, EnemySpawner: {isEnemySpawnerAssigned}, " +
                 $"PlayerController: {isPlayerControllerAssigned}, PlayerAttack: {isPlayerAttackAssigned}, " +
+                $"StartPanel: {isStartPanelAssigned}, StartButton: {isStartButtonAssigned}, " +
+                $"QuitButton: {isQuitButtonAssigned}, " +
                 $"FailPanel: {isFailPanelAssigned}, RestartButton: {isRestartButtonAssigned}, " +
                 $"ClearPanel: {isClearPanelAssigned}, ClearRestartButton: {isClearRestartButtonAssigned}, " +
                 $"ThirdPersonCamera: {isThirdPersonCameraAssigned})",
@@ -86,14 +109,26 @@ public class kms99400_GameFlowController : MonoBehaviour
             return;
         }
 
-        currentState = GameState.Playing;
+        currentState = GameState.WaitingToStart;
         isRestarting = false;
 
+        startPanel.SetActive(true);
         failPanel.SetActive(false);
         clearPanel.SetActive(false);
 
+        startButton.interactable = true;
+        quitButton.interactable = true;
         restartButton.interactable = true;
         clearRestartButton.interactable = true;
+
+        playerController.SetMovementEnabled(false);
+        playerAttack.SetAttackEnabled(false);
+        thirdPersonCamera.enabled = false;
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        Time.timeScale = 0f;
     }
 
     private void OnEnable()
@@ -106,6 +141,16 @@ public class kms99400_GameFlowController : MonoBehaviour
         if (enemySpawner != null)
         {
             enemySpawner.AllEnemiesDefeated += HandleAllEnemiesDefeated;
+        }
+
+        if (startButton != null)
+        {
+            startButton.onClick.AddListener(StartGame);
+        }
+
+        if (quitButton != null)
+        {
+            quitButton.onClick.AddListener(QuitGame);
         }
 
         if (restartButton != null)
@@ -131,6 +176,16 @@ public class kms99400_GameFlowController : MonoBehaviour
             enemySpawner.AllEnemiesDefeated -= HandleAllEnemiesDefeated;
         }
 
+        if (startButton != null)
+        {
+            startButton.onClick.RemoveListener(StartGame);
+        }
+
+        if (quitButton != null)
+        {
+            quitButton.onClick.RemoveListener(QuitGame);
+        }
+
         if (restartButton != null)
         {
             restartButton.onClick.RemoveListener(RestartGame);
@@ -140,6 +195,43 @@ public class kms99400_GameFlowController : MonoBehaviour
         {
             clearRestartButton.onClick.RemoveListener(RestartGame);
         }
+    }
+
+    private void StartGame()
+    {
+        if (currentState != GameState.WaitingToStart)
+        {
+            return;
+        }
+
+        currentState = GameState.Playing;
+        startButton.interactable = false;
+        startPanel.SetActive(false);
+
+        playerController.SetMovementEnabled(true);
+        playerAttack.SetAttackEnabled(true);
+        thirdPersonCamera.enabled = true;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        Time.timeScale = 1f;
+    }
+
+    private void QuitGame()
+    {
+        if (currentState != GameState.WaitingToStart)
+        {
+            return;
+        }
+
+        quitButton.interactable = false;
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     private void HandlePlayerDied(kms99400_PlayerFallDeath source)
@@ -177,7 +269,9 @@ public class kms99400_GameFlowController : MonoBehaviour
 
     private void RestartGame()
     {
-        if (currentState == GameState.Playing || isRestarting)
+        if (currentState == GameState.WaitingToStart ||
+            currentState == GameState.Playing ||
+            isRestarting)
         {
             return;
         }
