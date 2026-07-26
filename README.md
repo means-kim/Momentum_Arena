@@ -15,9 +15,12 @@
 >
 > 권장 파일: `Docs/Media/momentum-arena-gameplay.gif`
 
+<img width="1080" height="608" alt="Momentum_Arena_MainLoop2" src="https://github.com/user-attachments/assets/f417df76-ff4e-4c3f-aca6-800d69430305" />
 <!-- 촬영 후 아래 주석을 해제하세요.
 ![Momentum Arena 핵심 플레이](Docs/Media/momentum-arena-gameplay.gif)
 -->
+
+
 
 > **플레이 영상 링크 배치 위치 — 전체 플레이**
 >
@@ -118,6 +121,10 @@ flowchart LR
 > 에너지가 적을 때와 가득 찼을 때의 공격 범위·색상·넉백 차이를 좌우 비교 GIF로 보여줍니다.
 >
 > 권장 파일: `Docs/Media/shockwave-comparison.gif`
+<img width="1080" height="608" alt="Momentum_Arena_SmallShockwave" src="https://github.com/user-attachments/assets/ba40773a-c1e6-4311-b7b3-79ee7cd7904f" />
+<img width="1080" height="608" alt="Momentum_Arena_BigShockwave" src="https://github.com/user-attachments/assets/45cb219a-5f7a-4516-bfbf-45c97f0e5dbf" />
+
+
 
 <!-- ![충격파 강도 비교](Docs/Media/shockwave-comparison.gif) -->
 
